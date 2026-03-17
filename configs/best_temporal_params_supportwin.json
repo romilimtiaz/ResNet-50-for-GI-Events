@@ -1,0 +1,25 @@
+{
+  "smooth_type": "ema",
+  "ema_alpha": 0.2,
+  "path_decoder": "support_window",
+  "support_window": 10,
+  "start_high_th": 0.5,
+  "support_count_th": 3,
+  "continue_th": 0.2,
+  "max_gap_continue": 3,
+  "min_segment_len": 3,
+  "trim_tail_th": 0.1,
+  "presence_max_th": 0.45,
+  "presence_min_frames": 6,
+  "presence_frame_th": 0.3,
+  "gap_close": 2,
+  "min_len": 3,
+  "topk": 0,
+  "per_class": {
+    "blood": {"support_window": 8, "support_count_th": 2, "continue_th": 0.15},
+    "lymphangioectasis": {"support_window": 12, "support_count_th": 3, "continue_th": 0.18},
+    "polyp": {"support_window": 8, "support_count_th": 2, "continue_th": 0.18},
+    "erosion": {"support_window": 10, "support_count_th": 3, "continue_th": 0.18},
+    "erythema": {"support_window": 10, "support_count_th": 3, "continue_th": 0.18}
+  }
+}

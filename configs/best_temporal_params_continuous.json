@@ -1,0 +1,54 @@
+{
+  "smooth_type": "ema",
+  "movavg_window": 5,
+  "ema_alpha": 0.2,
+  "median_window": 5,
+  "decoder": "persistent",
+  "start_min_frames": 2,
+  "stop_min_frames": 4,
+  "th_high": 0.45,
+  "th_low": 0.12,
+  "presence_max_th": 0.45,
+  "presence_min_frames": 6,
+  "presence_frame_th": 0.3,
+  "gap_close": 2,
+  "min_len": 6,
+  "trim_th": 0.08,
+  "score_type": "mean",
+  "nms_iou": 0.3,
+  "topk": 4,
+  "per_class": {
+    "blood": {
+      "topk": 6,
+      "gap_close": 4,
+      "min_len": 8,
+      "th_high": 0.4,
+      "th_low": 0.10,
+      "presence_max_th": 0.45
+    },
+    "erosion": {
+      "topk": 4,
+      "th_high": 0.45,
+      "th_low": 0.12,
+      "presence_max_th": 0.5
+    },
+    "erythema": {
+      "topk": 4,
+      "th_high": 0.45,
+      "th_low": 0.12,
+      "presence_max_th": 0.5
+    },
+    "polyp": {
+      "topk": 4,
+      "th_high": 0.45,
+      "th_low": 0.12,
+      "presence_max_th": 0.5
+    },
+    "ulcer": {
+      "topk": 4,
+      "th_high": 0.45,
+      "th_low": 0.12,
+      "presence_max_th": 0.5
+    }
+  }
+}

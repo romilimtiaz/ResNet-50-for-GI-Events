@@ -1,0 +1,20 @@
+{
+  "feature_dim": 2048,
+  "seq_len": 256,
+  "stride": 128,
+  "batch_size": 8,
+  "learning_rate": 0.001,
+  "epochs": 12,
+  "num_stages": 2,
+  "num_layers": 4,
+  "hidden_dim": 128,
+  "dropout": 0.3,
+  "anatomy_loss_weight": 1.0,
+  "pathology_loss_weight": 1.0,
+  "smoothness_loss_weight": 0.05,
+  "pathology_threshold": 0.5,
+  "temperature": 1.0,
+  "early_stopping_patience": 3,
+  "focal_gamma": 0.0,
+  "class_weights_pathology": ""
+}

@@ -1,0 +1,52 @@
+# ---- Python ----
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+
+# ---- Large datasets / raw data ----
+Galar_Frames_*/
+Galar_labels_and_metadata/
+Galar_splits/
+Testdata_ICPR_2026_RARE_Challenge/
+Testdata_ICPR_2026_RARE_Challenge.zip
+20251215_Labels_Updated/
+more Data/
+rare_class_images/
+tide2medmnist/
+
+# ---- Outputs / caches ----
+cache/
+runs/
+outputs/
+logs/
+temporal_project/cache/
+temporal_project/outputs/
+
+# ---- Model checkpoints / arrays ----
+*.pt
+*.pth
+*.ckpt
+*.npz
+
+# ---- Predictions / large artifacts ----
+pred_*.json
+test_predictions*.json
+train_predictions*.json
+*_pred*.json
+
+# ---- Archives / media ----
+*.zip
+*.tar
+*.tar.gz
+*.7z
+*.rar
+*.mp4
+*.avi
+*.mov
+*.mkv

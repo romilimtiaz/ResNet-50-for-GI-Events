@@ -1,0 +1,18 @@
+{
+  "smooth_type": "ema",
+  "movavg_window": 5,
+  "ema_alpha": 0.1,
+  "median_window": 5,
+  "th_high": 0.4,
+  "th_low": 0.05,
+  "presence_max_th": 0.0,
+  "presence_min_frames": 0,
+  "presence_frame_th": 0.3,
+  "gap_close": 0,
+  "min_len": 3,
+  "trim_th": 0.0,
+  "score_type": "mean",
+  "nms_iou": 0.0,
+  "topk": 0,
+  "per_class": {}
+}

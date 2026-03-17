@@ -1,0 +1,17 @@
+{
+  "decoder": "hmm_viterbi",
+  "path_decoder": "hmm",
+  "temperature": 1.0,
+  "anatomy_stay_bias": 1.5,
+  "pathology_default_stay_bias": 1.2,
+  "pathology_default_start_bias": 0.0,
+  "use_duration_prior": true,
+  "per_class": {
+    "blood": {"stay_bias": 1.05},
+    "erosion": {"stay_bias": 1.1},
+    "erythema": {"stay_bias": 1.1},
+    "polyp": {"stay_bias": 1.0},
+    "lymphangioectasis": {"stay_bias": 1.05},
+    "ulcer": {"stay_bias": 1.0}
+  }
+}

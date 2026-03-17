@@ -1,0 +1,22 @@
+name: rarevision
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pytorch
+  - torchvision
+  - pytorch-cuda=12.1
+  - numpy
+  - pandas
+  - scikit-learn
+  - tqdm
+  - pillow
+  - matplotlib
+  - imageio
+  - imageio-ffmpeg
+  - pyyaml
+  - pip:
+      - timm

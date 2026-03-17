@@ -1,0 +1,114 @@
+{
+  "smooth_type": "ema",
+  "movavg_window": 5,
+  "ema_alpha": 0.1,
+  "median_window": 5,
+  "th_high": 0.4,
+  "th_low": 0.02,
+  "presence_max_th": 0.0,
+  "presence_min_frames": 6,
+  "presence_frame_th": 0.3,
+  "gap_close": 10,
+  "min_len": 6,
+  "trim_th": 0.0,
+  "score_type": "mean",
+  "nms_iou": 0.0,
+  "topk": 8,
+  "per_class": {
+    "pylorus": {
+      "presence_max_th": 0.6,
+      "presence_min_frames": 3,
+      "topk": 1,
+      "th_high": 0.5,
+      "th_low": 0.15,
+      "min_len": 6
+    },
+    "hematin": {
+      "presence_max_th": 0.6,
+      "presence_min_frames": 3,
+      "topk": 2,
+      "th_high": 0.5,
+      "th_low": 0.15,
+      "min_len": 6
+    },
+    "lymphangioectasis": {
+      "presence_max_th": 0.6,
+      "presence_min_frames": 3,
+      "topk": 2,
+      "th_high": 0.5,
+      "th_low": 0.15,
+      "min_len": 6
+    },
+    "z-line": {
+      "presence_max_th": 0.7,
+      "presence_min_frames": 2,
+      "topk": 1,
+      "th_high": 0.55,
+      "th_low": 0.2,
+      "min_len": 6
+    },
+    "ileocecal valve": {
+      "presence_max_th": 0.6,
+      "presence_min_frames": 2,
+      "topk": 1,
+      "th_high": 0.5,
+      "th_low": 0.15,
+      "min_len": 6
+    },
+    "active bleeding": {
+      "presence_max_th": 0.55,
+      "presence_min_frames": 3,
+      "topk": 3,
+      "th_high": 0.45,
+      "th_low": 0.08,
+      "min_len": 6
+    },
+    "angiectasia": {
+      "presence_max_th": 0.5,
+      "presence_min_frames": 3,
+      "topk": 4,
+      "th_high": 0.45,
+      "th_low": 0.08,
+      "min_len": 6
+    },
+    "polyp": {
+      "presence_max_th": 0.5,
+      "presence_min_frames": 3,
+      "topk": 5,
+      "th_high": 0.4,
+      "th_low": 0.02,
+      "min_len": 6
+    },
+    "ulcer": {
+      "presence_max_th": 0.5,
+      "presence_min_frames": 3,
+      "topk": 5,
+      "th_high": 0.4,
+      "th_low": 0.02,
+      "min_len": 6
+    },
+    "erosion": {
+      "presence_max_th": 0.45,
+      "presence_min_frames": 5,
+      "topk": 8,
+      "th_high": 0.4,
+      "th_low": 0.02,
+      "min_len": 6
+    },
+    "erythema": {
+      "presence_max_th": 0.45,
+      "presence_min_frames": 3,
+      "topk": 8,
+      "th_high": 0.4,
+      "th_low": 0.02,
+      "min_len": 6
+    },
+    "blood": {
+      "topk": 15,
+      "gap_close": 12,
+      "min_len": 8,
+      "th_high": 0.35,
+      "th_low": 0.02
+    }
+  }
+}
