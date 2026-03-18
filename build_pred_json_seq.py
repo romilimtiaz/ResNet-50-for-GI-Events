@@ -357,12 +357,32 @@ def decode_anatomy(
     start_penalty: float,
     trans_penalty: float,
 ) -> Tuple[List[int], np.ndarray]:
+    def vote_smooth_probs(p: np.ndarray, win: int) -> np.ndarray:
+        win = max(1, int(win))
+        if win % 2 == 0:
+            win += 1
+        half = win // 2
+        labels0 = p.argmax(axis=1)
+        T, C = p.shape
+        out = np.zeros_like(p, dtype=np.float32)
+        for t in range(T):
+            s = max(0, t - half)
+            e = min(T, t + half + 1)
+            counts = np.bincount(labels0[s:e], minlength=C).astype(np.float32)
+            if counts.sum() > 0:
+                out[t] = counts / counts.sum()
+            else:
+                out[t, labels0[t]] = 1.0
+        return out
+
     if smooth_type == "ema":
         smooth = smooth_probs(probs, "ema", 1, ema_alpha)
     elif smooth_type == "movavg":
         smooth = smooth_probs(probs, "movavg", window, ema_alpha)
     elif smooth_type == "median":
         smooth = smooth_probs(probs, "median", window, ema_alpha)
+    elif smooth_type == "vote":
+        smooth = vote_smooth_probs(probs, window)
     else:
         smooth = probs.copy()
 
@@ -480,6 +500,18 @@ def build_framewise_pathology_masks(
     return masks
 
 
+def load_anatomy_gate_map(path: str) -> Dict[str, set]:
+    if not path:
+        return {}
+    data = json.loads(Path(path).read_text())
+    gate = {}
+    for k, v in data.items():
+        if not isinstance(v, (list, tuple)):
+            continue
+        gate[str(k)] = set(str(x) for x in v)
+    return gate
+
+
 def compose_events_from_active_labels(
     frame_nums: List[int],
     active_labels: List[Tuple[str, ...]],
@@ -552,7 +584,7 @@ def main():
     parser.add_argument("--metadata-dir", default="Testdata_ICPR_2026_RARE_Challenge/ukdd_navi_00051_00068_00076")
     parser.add_argument("--index-col", default="index")
     parser.add_argument("--anatomy-mode", choices=["argmax", "viterbi"], default="viterbi")
-    parser.add_argument("--anatomy-smooth", choices=["none", "movavg", "ema", "median"], default="ema")
+    parser.add_argument("--anatomy-smooth", choices=["none", "movavg", "ema", "median", "vote"], default="ema")
     parser.add_argument("--anatomy-window", type=int, default=5)
     parser.add_argument("--anatomy-ema-alpha", type=float, default=0.3)
     parser.add_argument("--anatomy-min-len", type=int, default=5)
@@ -561,6 +593,8 @@ def main():
     parser.add_argument("--anatomy-trans-penalty", type=float, default=-0.05)
     parser.add_argument("--anatomy-decoder", choices=["seq", "hmm"], default="seq")
     parser.add_argument("--pathology-merge-gap", type=int, default=0)
+    parser.add_argument("--anatomy-gate", default="", help="JSON mapping pathology->allowed anatomy labels")
+    parser.add_argument("--anatomy-gate-mode", choices=["hard", "soft"], default="hard")
     parser.add_argument("--path-decoder", choices=["hysteresis", "support_window", "persistent", "hmm"], default="")
     parser.add_argument("--hmm-label-dir", default="")
     parser.add_argument("--hmm-video-list", default="")
@@ -611,6 +645,18 @@ def main():
         params["per_class"] = per_class
     if args.path_decoder:
         params["path_decoder"] = args.path_decoder
+
+    # Optional anatomy gating map (pathology -> allowed anatomy labels)
+    anatomy_gate_map: Dict[str, set] = {}
+    if isinstance(params.get("pathology_anatomy_map"), dict):
+        anatomy_gate_map = {
+            str(k): set(v)
+            for k, v in params["pathology_anatomy_map"].items()
+            if isinstance(v, (list, tuple))
+        }
+    if args.anatomy_gate:
+        anatomy_gate_map = load_anatomy_gate_map(args.anatomy_gate)
+    anatomy_gate_mode = args.anatomy_gate_mode
 
     id_to_dir = build_video_id_map(args.root)
 
@@ -815,6 +861,8 @@ def main():
         if coverage != len(probs):
             raise RuntimeError(f"Anatomy coverage mismatch for {vid}: {coverage} vs {len(probs)}")
 
+        anatomy_frame_labels = build_framewise_anatomy_labels(decoded, ANATOMY_REGIONS)
+
         # Pathology detection
         pathology_events = []
         suppressed = 0
@@ -822,6 +870,15 @@ def main():
         for lbl in pathology_labels:
             idx = UNIFIED_LABELS.index(lbl)
             p = probs[:, idx]
+            if anatomy_gate_map and lbl in anatomy_gate_map:
+                allowed = anatomy_gate_map[lbl]
+                if allowed:
+                    mask = np.array([a in allowed for a in anatomy_frame_labels], dtype=bool)
+                    if anatomy_gate_mode == "hard":
+                        p = p.copy()
+                        p[~mask] = 0.0
+                    else:
+                        p = p * mask.astype(np.float32)
             if path_decoder == "hmm":
                 # presence gating
                 presence_max_th = float(get_param(params, lbl, "presence_max_th", 0.0) or 0.0)
@@ -881,7 +938,6 @@ def main():
         print(f"{vid} pathology suppressed labels: {suppressed}")
 
         if args.compose_framewise:
-            anatomy_frame_labels = build_framewise_anatomy_labels(decoded, ANATOMY_REGIONS)
             pathology_masks = build_framewise_pathology_masks(pathology_events, frame_nums, pathology_labels)
             active = []
             for i in range(len(frame_nums)):

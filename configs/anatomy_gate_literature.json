@@ -1,0 +1,9 @@
+{
+  "angiectasia": ["stomach", "small intestine", "colon", "pylorus", "ileocecal valve"],
+  "lymphangioectasis": ["small intestine", "ileocecal valve"],
+  "polyp": ["esophagus", "stomach", "small intestine", "colon", "ileocecal valve"],
+  "ulcer": ["stomach", "small intestine", "pylorus"],
+  "hematin": ["stomach", "pylorus"],
+  "blood": ["mouth", "esophagus", "stomach", "small intestine", "colon", "z-line", "pylorus", "ileocecal valve"],
+  "active bleeding": ["mouth", "esophagus", "stomach", "small intestine", "colon", "z-line", "pylorus", "ileocecal valve"]
+}
